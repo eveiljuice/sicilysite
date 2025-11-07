@@ -26,31 +26,8 @@ export function initAnimations() {
 }
 
 function animateRoutes() {
-  const routes = document.querySelectorAll('#routes .route');
-  
-  routes.forEach((route, index) => {
-    const animation = gsap.fromTo(
-      route,
-      {
-        strokeDashoffset: 1000
-      },
-      {
-        strokeDashoffset: 0,
-        duration: 2,
-        ease: 'power2.inOut',
-        scrollTrigger: {
-          trigger: '.map-section',
-          start: 'top center',
-          end: 'center center',
-          scrub: 1,
-          // Stagger routes slightly
-          delay: index * 0.1
-        }
-      }
-    );
-    
-    animationInstances.push(animation);
-  });
+  // Routes animation removed - using Leaflet map instead of SVG routes
+  // Map markers are animated in map.js
 }
 
 function animateStoryCards() {
@@ -198,11 +175,7 @@ export function toggleAnimations(enabled) {
       clearProps: 'all'
     });
     
-    // Reset routes
-    const routes = document.querySelectorAll('#routes .route');
-    gsap.set(routes, {
-      strokeDashoffset: 0
-    });
+    // Routes reset removed - using Leaflet map
   }
 }
 

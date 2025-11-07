@@ -8,7 +8,7 @@
       "./assets/img/palermo-2.jpg",
       "./assets/img/palermo-3.jpg"
     ],
-    "coords": { "x": "20%", "y": "25%" }
+    "coords": { "lat": 38.1157, "lng": 13.3613 }
   },
   {
     "id": "catania",
@@ -18,7 +18,7 @@
       "./assets/img/catania-1.jpg",
       "./assets/img/catania-2.jpg"
     ],
-    "coords": { "x": "72%", "y": "48%" }
+    "coords": { "lat": 37.5079, "lng": 15.0830 }
   },
   {
     "id": "taormina",
@@ -28,7 +28,7 @@
       "./assets/img/taormina-1.jpg",
       "./assets/img/taormina-2.jpg"
     ],
-    "coords": { "x": "80%", "y": "35%" }
+    "coords": { "lat": 37.8520, "lng": 15.2889 }
   },
   {
     "id": "agrigento",
@@ -39,7 +39,7 @@
       "./assets/img/agrigento-2.jpg",
       "./assets/img/agrigento-3.jpg"
     ],
-    "coords": { "x": "30%", "y": "70%" }
+    "coords": { "lat": 37.3089, "lng": 13.5767 }
   },
   {
     "id": "trapani",
@@ -48,7 +48,7 @@
     "gallery": [
       "./assets/img/trapani-1.jpg"
     ],
-    "coords": { "x": "5%", "y": "35%" }
+    "coords": { "lat": 38.0176, "lng": 12.5364 }
   },
   {
     "id": "siracusa",
@@ -58,7 +58,7 @@
       "./assets/img/siracusa-1.jpg",
       "./assets/img/siracusa-2.jpg"
     ],
-    "coords": { "x": "88%", "y": "72%" }
+    "coords": { "lat": 37.0754, "lng": 15.2866 }
   },
   {
     "id": "messina",
@@ -67,7 +67,7 @@
     "gallery": [
       "./assets/img/messina-1.jpg"
     ],
-    "coords": { "x": "82%", "y": "15%" }
+    "coords": { "lat": 38.1938, "lng": 15.5540 }
   },
   {
     "id": "enna",
@@ -76,7 +76,7 @@
     "gallery": [
       "./assets/img/enna-1.jpg"
     ],
-    "coords": { "x": "50%", "y": "45%" }
+    "coords": { "lat": 37.5679, "lng": 14.2792 }
   },
   {
     "id": "ragusa",
@@ -86,7 +86,7 @@
       "./assets/img/ragusa-1.jpg",
       "./assets/img/ragusa-2.jpg"
     ],
-    "coords": { "x": "68%", "y": "80%" }
+    "coords": { "lat": 36.9259, "lng": 14.7304 }
   },
   {
     "id": "caltanissetta",
@@ -95,7 +95,6 @@
     "gallery": [
       "./assets/img/caltanissetta-1.jpg"
     ],
-    "coords": { "x": "44%", "y": "60%" }
+    "coords": { "lat": 37.4902, "lng": 14.0625 }
   }
 ]
-

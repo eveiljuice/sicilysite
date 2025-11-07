@@ -1,11 +1,26 @@
 /**
- * Interactive Map Functionality
- * Handles SVG map interactions, pins, tooltips, and region clicks
+ * Interactive Map with Leaflet and OpenStreetMap
+ * Handles map initialization, markers, popups, and interactions
  */
 
+let map = null;
 let locationsData = [];
-let svgDocument = null;
-let currentFocusedRegion = null;
+let markers = [];
+
+// Custom icon for markers
+function createCustomIcon(color = '#E67E22') {
+  return L.divIcon({
+    className: 'custom-marker',
+    html: `
+      <div class="marker-pin" style="background-color: ${color};">
+        <div class="marker-pulse"></div>
+      </div>
+    `,
+    iconSize: [24, 24],
+    iconAnchor: [12, 24],
+    popupAnchor: [0, -24]
+  });
+}
 
 export async function initMap() {
   // Load locations data
@@ -17,233 +32,248 @@ export async function initMap() {
     return;
   }
   
-  // Get SVG map
-  const mapObject = document.getElementById('sicilyMap');
-  if (!mapObject) {
-    console.error('Map object not found');
+  // Initialize Leaflet map
+  const mapContainer = document.getElementById('sicilyMap');
+  if (!mapContainer) {
+    console.error('Map container not found');
     return;
   }
   
-  // Wait for SVG to load
-  if (mapObject.contentDocument) {
-    setupMap(mapObject);
-  } else {
-    mapObject.addEventListener('load', () => setupMap(mapObject));
-  }
-}
-
-function setupMap(mapObject) {
-  svgDocument = mapObject.contentDocument;
-  if (!svgDocument) {
-    console.error('Cannot access SVG document');
-    return;
-  }
+  // Center of Sicily
+  const sicilyCenter = [37.5, 14.0];
   
-  // Setup regions
-  const regions = svgDocument.querySelectorAll('.region');
-  regions.forEach(region => {
-    setupRegion(region);
+  // Create map instance
+  map = L.map('sicilyMap', {
+    center: sicilyCenter,
+    zoom: 8,
+    minZoom: 7,
+    maxZoom: 15,
+    zoomControl: true,
+    attributionControl: true,
+    scrollWheelZoom: true,
+    doubleClickZoom: true,
+    boxZoom: true,
+    keyboard: true,
+    dragging: true,
+    touchZoom: true
   });
   
-  // Render pins
-  renderPins();
-  
-  console.log(`Map initialized with ${regions.length} regions and ${locationsData.length} pins`);
-}
-
-function setupRegion(region) {
-  const regionId = region.id;
-  
-  // Mouse events
-  region.addEventListener('mouseenter', (e) => handleRegionHover(e, regionId, true));
-  region.addEventListener('mouseleave', (e) => handleRegionHover(e, regionId, false));
-  region.addEventListener('click', () => handleRegionClick(regionId));
-  
-  // Keyboard events
-  region.addEventListener('focus', (e) => {
-    handleRegionHover(e, regionId, true);
-    currentFocusedRegion = region;
+  // Add OpenStreetMap tile layer
+  const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    tileSize: 256,
+    zoomOffset: 0
   });
   
-  region.addEventListener('blur', (e) => {
-    handleRegionHover(e, regionId, false);
-    currentFocusedRegion = null;
-  });
+  osmLayer.addTo(map);
   
-  region.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      handleRegionClick(regionId);
-    }
-  });
+  // Add markers for each location
+  addMarkers();
+  
+  // Fit map to show all markers
+  fitMapToMarkers();
+  
+  // Add scroll-triggered animation for map appearance
+  animateMapAppearance();
+  
+  console.log(`Map initialized with ${locationsData.length} locations`);
 }
 
-function handleRegionHover(event, regionId, isEntering) {
-  const location = locationsData.find(loc => loc.id === regionId);
-  if (!location) return;
+function addMarkers() {
+  if (!map || !locationsData.length) return;
   
-  const tooltip = document.getElementById('mapTooltip');
-  if (!tooltip) return;
-  
-  if (isEntering) {
-    tooltip.textContent = location.name;
-    tooltip.classList.add('show');
-    updateTooltipPosition(event);
-  } else {
-    tooltip.classList.remove('show');
-  }
-}
-
-function updateTooltipPosition(event) {
-  const tooltip = document.getElementById('mapTooltip');
-  if (!tooltip) return;
-  
-  const mapWrap = document.querySelector('.map-wrap');
-  const rect = mapWrap.getBoundingClientRect();
-  
-  let x, y;
-  
-  if (event.type === 'focus') {
-    // For keyboard focus, position near the focused element
-    const target = event.target;
-    const bbox = target.getBBox();
-    const mapObject = document.getElementById('sicilyMap');
-    const mapRect = mapObject.getBoundingClientRect();
-    
-    x = (bbox.x + bbox.width / 2) * (mapRect.width / 1000);
-    y = (bbox.y) * (mapRect.height / 600);
-  } else {
-    // For mouse, use cursor position
-    x = event.clientX - rect.left;
-    y = event.clientY - rect.top;
-  }
-  
-  tooltip.style.left = `${x}px`;
-  tooltip.style.top = `${y}px`;
-}
-
-function handleRegionClick(regionId) {
-  const location = locationsData.find(loc => loc.id === regionId);
-  if (!location) {
-    console.warn(`No data found for region: ${regionId}`);
-    return;
-  }
-  
-  // Import and open modal (modal.js will be loaded)
-  if (window.openModal) {
-    window.openModal(location);
-  }
-}
-
-function renderPins() {
-  const pinsContainer = document.getElementById('mapPins');
-  if (!pinsContainer) return;
-  
-  pinsContainer.innerHTML = '';
+  // Clear existing markers
+  markers.forEach(marker => map.removeLayer(marker));
+  markers = [];
   
   locationsData.forEach(location => {
-    if (!location.coords) return;
+    if (!location.coords || !location.coords.lat || !location.coords.lng) {
+      console.warn(`Missing coordinates for location: ${location.id}`);
+      return;
+    }
     
-    const pin = document.createElement('div');
-    pin.className = 'pin';
-    pin.style.setProperty('--x', location.coords.x);
-    pin.style.setProperty('--y', location.coords.y);
-    pin.setAttribute('role', 'button');
-    pin.setAttribute('tabindex', '0');
-    pin.setAttribute('aria-label', `Открыть информацию о ${location.name}`);
+    const latlng = [location.coords.lat, location.coords.lng];
     
-    // Click handler
-    pin.addEventListener('click', () => {
+    // Create custom icon
+    const icon = createCustomIcon('#E67E22');
+    
+    // Create marker
+    const marker = L.marker(latlng, {
+      icon: icon,
+      title: location.name,
+      alt: location.name,
+      keyboard: true,
+      riseOnHover: true
+    });
+    
+    // Add popup with location name
+    marker.bindPopup(
+      `<div class="map-popup">
+        <h3>${location.name}</h3>
+        <p>${location.summary.substring(0, 100)}...</p>
+        <button class="popup-button" data-location-id="${location.id}">Узнать больше</button>
+      </div>`,
+      {
+        maxWidth: 300,
+        className: 'custom-popup',
+        closeButton: true,
+        autoPan: true,
+        autoPanPadding: [50, 50]
+      }
+    );
+    
+    // Click handler - open modal
+    marker.on('click', () => {
       if (window.openModal) {
         window.openModal(location);
       }
     });
     
     // Keyboard handler
-    pin.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
+    marker.on('keypress', (e) => {
+      if (e.originalEvent.key === 'Enter' || e.originalEvent.key === ' ') {
+        e.originalEvent.preventDefault();
         if (window.openModal) {
           window.openModal(location);
         }
       }
     });
     
-    // Hover handlers
-    pin.addEventListener('mouseenter', (e) => {
-      const tooltip = document.getElementById('mapTooltip');
-      if (tooltip) {
-        tooltip.textContent = location.name;
-        tooltip.classList.add('show');
-        
-        const mapWrap = document.querySelector('.map-wrap');
-        const rect = mapWrap.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        tooltip.style.left = `${x}px`;
-        tooltip.style.top = `${y}px`;
-      }
+    // Add hover effect
+    marker.on('mouseover', () => {
+      marker.setZIndexOffset(1000);
     });
     
-    pin.addEventListener('mouseleave', () => {
-      const tooltip = document.getElementById('mapTooltip');
-      if (tooltip) {
-        tooltip.classList.remove('show');
-      }
+    marker.on('mouseout', () => {
+      marker.setZIndexOffset(0);
     });
     
-    pin.addEventListener('focus', (e) => {
-      const tooltip = document.getElementById('mapTooltip');
-      if (tooltip) {
-        tooltip.textContent = location.name;
-        tooltip.classList.add('show');
-        
-        const rect = pin.getBoundingClientRect();
-        const mapWrap = document.querySelector('.map-wrap');
-        const mapRect = mapWrap.getBoundingClientRect();
-        
-        const x = rect.left + rect.width / 2 - mapRect.left;
-        const y = rect.top - mapRect.top;
-        
-        tooltip.style.left = `${x}px`;
-        tooltip.style.top = `${y}px`;
-      }
-    });
-    
-    pin.addEventListener('blur', () => {
-      const tooltip = document.getElementById('mapTooltip');
-      if (tooltip) {
-        tooltip.classList.remove('show');
-      }
-    });
-    
-    pinsContainer.appendChild(pin);
+    // Add to map
+    marker.addTo(map);
+    markers.push(marker);
+  });
+  
+  // Handle popup button clicks
+  map.on('popupopen', (e) => {
+    const popup = e.popup;
+    const button = popup._contentNode?.querySelector('.popup-button');
+    if (button) {
+      button.addEventListener('click', () => {
+        const locationId = button.dataset.locationId;
+        const location = locationsData.find(loc => loc.id === locationId);
+        if (location && window.openModal) {
+          map.closePopup();
+          window.openModal(location);
+        }
+      });
+    }
   });
 }
 
-// Track mouse movement for smooth tooltip following
-document.addEventListener('mousemove', (e) => {
-  const tooltip = document.getElementById('mapTooltip');
-  if (!tooltip || !tooltip.classList.contains('show')) return;
+function fitMapToMarkers() {
+  if (!map || markers.length === 0) return;
   
-  const mapWrap = document.querySelector('.map-wrap');
-  if (!mapWrap) return;
-  
-  const rect = mapWrap.getBoundingClientRect();
-  
-  // Check if mouse is over map area
-  if (
-    e.clientX >= rect.left &&
-    e.clientX <= rect.right &&
-    e.clientY >= rect.top &&
-    e.clientY <= rect.bottom
-  ) {
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    
-    tooltip.style.left = `${x}px`;
-    tooltip.style.top = `${y}px`;
-  }
-});
+  const group = new L.featureGroup(markers);
+  map.fitBounds(group.getBounds().pad(0.1), {
+    maxZoom: 10,
+    animate: true,
+    duration: 1.0
+  });
+}
 
+function animateMapAppearance() {
+  if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
+    return;
+  }
+  
+  const mapSection = document.querySelector('.map-section');
+  if (!mapSection) return;
+  
+  // Animate map container fade-in
+  gsap.fromTo('#sicilyMap', 
+    {
+      opacity: 0,
+      scale: 0.95
+    },
+    {
+      opacity: 1,
+      scale: 1,
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: {
+        trigger: mapSection,
+        start: 'top 80%',
+        end: 'top 50%',
+        toggleActions: 'play none none reverse'
+      }
+    }
+  );
+  
+  // Animate markers appearance with stagger
+  markers.forEach((marker, index) => {
+    const markerElement = marker.getElement();
+    if (markerElement) {
+      gsap.fromTo(markerElement,
+        {
+          opacity: 0,
+          scale: 0
+        },
+        {
+          opacity: 1,
+          scale: 1,
+          duration: 0.5,
+          delay: index * 0.1,
+          ease: 'back.out(1.5)',
+          scrollTrigger: {
+            trigger: mapSection,
+            start: 'top 70%',
+            toggleActions: 'play none none reverse'
+          }
+        }
+      );
+    }
+  });
+}
+
+// Export function to get map instance (for external use)
+export function getMap() {
+  return map;
+}
+
+// Export function to center map on location
+export function centerMapOnLocation(locationId) {
+  if (!map) return;
+  
+  const location = locationsData.find(loc => loc.id === locationId);
+  if (!location || !location.coords) return;
+  
+  const latlng = [location.coords.lat, location.coords.lng];
+  
+  map.setView(latlng, 12, {
+    animate: true,
+    duration: 1.0
+  });
+  
+  // Open popup for the marker
+  const marker = markers.find(m => {
+    const latlng = m.getLatLng();
+    return Math.abs(latlng.lat - location.coords.lat) < 0.01 &&
+           Math.abs(latlng.lng - location.coords.lng) < 0.01;
+  });
+  
+  if (marker) {
+    marker.openPopup();
+  }
+}
+
+// Handle window resize
+let resizeTimeout;
+window.addEventListener('resize', () => {
+  if (!map) return;
+  
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    map.invalidateSize();
+  }, 250);
+});

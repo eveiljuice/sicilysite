@@ -85,9 +85,7 @@
         </header>
         
         <div class="map-wrap">
-          <object id="sicilyMap" data="./assets/svg/sicily.svg" type="image/svg+xml" aria-label="Карта Сицилии с интерактивными регионами"></object>
-          <div id="mapPins" class="pins-container" role="list" aria-label="Точки интереса на карте"></div>
-          <div id="mapTooltip" class="map-tooltip" role="tooltip" aria-live="polite"></div>
+          <div id="sicilyMap" class="leaflet-map" aria-label="Интерактивная карта Сицилии"></div>
         </div>
       </div>
     </section>
@@ -295,9 +293,19 @@
     </div>
   </div>
 
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+        crossorigin=""/>
+  
   <!-- GSAP -->
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+          integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+          crossorigin=""></script>
   
   <!-- Scripts -->
   <script type="module" src="./scripts/app.js"></script>
