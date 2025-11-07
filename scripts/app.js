@@ -7,6 +7,7 @@ import { initParallax, toggleParallax } from './parallax.js';
 import { initMap } from './map.js';
 import { initModal } from './modal.js';
 import { initAnimations, toggleAnimations } from './animations.js';
+import { initHistory, toggleHistoryAnimations } from './history.js';
 import { shouldReduceMotion, refreshScrollTrigger } from './gsap-setup.js';
 
 // State
@@ -26,6 +27,7 @@ function init() {
   initMap();
   initModal();
   initAnimations();
+  initHistory();
   
   // Setup motion toggle
   setupMotionToggle();
@@ -98,6 +100,7 @@ function setupMotionToggle() {
     } else {
       toggleParallax(false);
       toggleAnimations(false);
+      toggleHistoryAnimations(false);
     }
     
     // Refresh ScrollTrigger
@@ -145,6 +148,7 @@ function watchMotionPreference() {
       } else {
         toggleParallax(false);
         toggleAnimations(false);
+        toggleHistoryAnimations(false);
       }
     }
   });
@@ -362,6 +366,7 @@ if (window.location.hostname === 'localhost' || window.location.hostname === '12
       } else {
         toggleParallax(false);
         toggleAnimations(false);
+        toggleHistoryAnimations(false);
       }
     },
     refreshScrollTrigger

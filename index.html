@@ -28,6 +28,7 @@
   <link rel="stylesheet" href="./styles/main.css">
   <link rel="stylesheet" href="./styles/map.css">
   <link rel="stylesheet" href="./styles/modal.css">
+  <link rel="stylesheet" href="./styles/history.css">
 </head>
 <body>
   <!-- Skip Link -->
@@ -47,6 +48,7 @@
         
         <ul class="nav-list">
           <li><a href="#map">Карта</a></li>
+          <li><a href="#history">История</a></li>
           <li><a href="#stories">Истории</a></li>
           <li><a href="#food">Гастрономия</a></li>
           <li><a href="#culture">Культура</a></li>
@@ -86,6 +88,46 @@
         
         <div class="map-wrap">
           <div id="sicilyMap" class="leaflet-map" aria-label="Интерактивная карта Сицилии"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- History Timeline Section -->
+    <section id="history" class="history-section" aria-labelledby="history-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="history-title" class="section-title">История Сицилии</h2>
+          <p class="section-subtitle">Путешествие сквозь тысячелетия</p>
+        </header>
+        
+        <div class="history-container">
+          <!-- Timeline -->
+          <div class="timeline-wrapper" role="region" aria-label="Исторический таймлайн">
+            <div class="timeline-line" aria-hidden="true"></div>
+            <div class="timeline-points" id="timelinePoints" role="list"></div>
+          </div>
+          
+          <!-- Slider -->
+          <div class="history-slider-wrapper">
+            <div class="history-slider" id="historySlider" role="region" aria-label="Слайдер исторических событий">
+              <div class="slider-track" id="sliderTrack" role="list"></div>
+            </div>
+            
+            <!-- Slider Controls -->
+            <div class="slider-controls" aria-label="Управление слайдером">
+              <button class="slider-btn slider-btn--prev" id="sliderPrev" aria-label="Предыдущее событие" disabled>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 18l-6-6 6-6"/>
+                </svg>
+              </button>
+              <div class="slider-counter" id="sliderCounter" aria-live="polite">1 / 4</div>
+              <button class="slider-btn slider-btn--next" id="sliderNext" aria-label="Следующее событие">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 18l6-6-6-6"/>
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </section>
