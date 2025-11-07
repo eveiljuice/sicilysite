@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Живая интерактивная карта Сицилии — откройте для себя историю, культуру и красоту острова">
+  <meta name="theme-color" content="#3498DB">
+  
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Живая карта Сицилии">
+  <meta property="og:description" content="Интерактивное путешествие по самому загадочному острову Средиземноморья">
+  <meta property="og:image" content="./assets/img/og-image.jpg">
+  <meta property="og:url" content="https://sicily-live.com">
+  
+  <title>Живая карта Сицилии — Интерактивное путешествие</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="./assets/icons/favicon.svg">
+  <link rel="manifest" href="./public/manifest.webmanifest">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="./styles/main.css">
+  <link rel="stylesheet" href="./styles/map.css">
+  <link rel="stylesheet" href="./styles/modal.css">
+</head>
+<body>
+  <!-- Skip Link -->
+  <a href="#main-content" class="skip-link">Перейти к основному содержимому</a>
+
+  <!-- Header -->
+  <header class="header" role="banner">
+    <div class="container">
+      <nav class="nav" aria-label="Основная навигация">
+        <a href="#hero" class="logo" aria-label="На главную">
+          <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+            <circle cx="20" cy="20" r="18" fill="var(--terracotta)" opacity="0.2"/>
+            <path d="M20 8 L28 20 L20 32 L12 20 Z" fill="var(--terracotta)"/>
+          </svg>
+          <span>Sicilia</span>
+        </a>
+        
+        <ul class="nav-list">
+          <li><a href="#map">Карта</a></li>
+          <li><a href="#stories">Истории</a></li>
+          <li><a href="#food">Гастрономия</a></li>
+          <li><a href="#culture">Культура</a></li>
+          <li><a href="#contact">Контакты</a></li>
+        </ul>
+        
+        <button id="motionToggle" class="motion-toggle" aria-pressed="false" aria-label="Переключить анимации">
+          <span class="toggle-label">Анимации: <span class="toggle-state">Вкл</span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <!-- Hero Section -->
+    <section id="hero" class="hero" aria-labelledby="hero-title">
+      <div class="parallax" aria-hidden="true">
+        <div class="layer sky" data-speed="0.15"></div>
+        <div class="layer mountains" data-speed="0.3"></div>
+        <div class="layer sea" data-speed="0.6"></div>
+      </div>
+      
+      <div class="hero-content">
+        <h1 id="hero-title" class="hero-title">Живая карта<br>Сицилии</h1>
+        <p class="hero-subtitle">Откройте для себя остров, где история дышит в каждом камне</p>
+        <a href="#map" class="cta-button">Начать путешествие</a>
+      </div>
+    </section>
+
+    <!-- Map Section -->
+    <section id="map" class="map-section" aria-labelledby="map-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="map-title" class="section-title">Интерактивная карта</h2>
+          <p class="section-subtitle">Выберите регион, чтобы узнать его историю</p>
+        </header>
+        
+        <div class="map-wrap">
+          <object id="sicilyMap" data="./assets/svg/sicily.svg" type="image/svg+xml" aria-label="Карта Сицилии с интерактивными регионами"></object>
+          <div id="mapPins" class="pins-container" role="list" aria-label="Точки интереса на карте"></div>
+          <div id="mapTooltip" class="map-tooltip" role="tooltip" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Stories Section -->
+    <section id="stories" class="stories-section" aria-labelledby="stories-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="stories-title" class="section-title">Истории регионов</h2>
+          <p class="section-subtitle">Каждый уголок острова хранит свою легенду</p>
+        </header>
+        
+        <div class="stories-grid">
+          <article class="story-card" data-animate>
+            <div class="story-image">
+              <img src="./assets/img/palermo-story.jpg" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="story-content">
+              <h3>Палермо: Перекресток цивилизаций</h3>
+              <p>Столица Сицилии — живой музей под открытым небом, где арабские рынки соседствуют с норманнскими дворцами.</p>
+            </div>
+          </article>
+          
+          <article class="story-card" data-animate>
+            <div class="story-image">
+              <img src="./assets/img/catania-story.jpg" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="story-content">
+              <h3>Катания: Город у подножия вулкана</h3>
+              <p>Этна — не просто вулкан, а живое сердце острова, формирующее ландшафт и характер сицилийцев.</p>
+            </div>
+          </article>
+          
+          <article class="story-card" data-animate>
+            <div class="story-image">
+              <img src="./assets/img/agrigento-story.jpg" alt="" loading="lazy" decoding="async">
+            </div>
+            <div class="story-content">
+              <h3>Агридженто: Долина храмов</h3>
+              <p>Греческие колонны, застывшие в вечности, рассказывают о величии древней Акрагаса.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Food Section -->
+    <section id="food" class="food-section" aria-labelledby="food-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="food-title" class="section-title">Гастрономия</h2>
+          <p class="section-subtitle">Вкусы, которые невозможно забыть</p>
+        </header>
+        
+        <div class="food-grid" data-animate>
+          <div class="food-card">
+            <div class="food-icon" aria-hidden="true">🍝</div>
+            <h3>Pasta alla Norma</h3>
+            <p>Баклажаны, томаты, рикотта — симфония средиземноморских вкусов</p>
+          </div>
+          
+          <div class="food-card">
+            <div class="food-icon" aria-hidden="true">🍰</div>
+            <h3>Cannoli</h3>
+            <p>Хрустящие трубочки с кремом рикотты — визитная карточка острова</p>
+          </div>
+          
+          <div class="food-card">
+            <div class="food-icon" aria-hidden="true">🍊</div>
+            <h3>Granita</h3>
+            <p>Ледяной десерт из сицилийских цитрусов, идеальный для жаркого дня</p>
+          </div>
+          
+          <div class="food-card">
+            <div class="food-icon" aria-hidden="true">🐟</div>
+            <h3>Морепродукты</h3>
+            <p>Свежайшие дары моря — от меч-рыбы до креветок из Мадзары</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Culture Section -->
+    <section id="culture" class="culture-section" aria-labelledby="culture-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="culture-title" class="section-title">Культура</h2>
+          <p class="section-subtitle">Традиции, рожденные тысячелетиями</p>
+        </header>
+        
+        <div class="culture-content" data-animate>
+          <div class="culture-text">
+            <h3>Наследие народов</h3>
+            <p>Сицилия — уникальный культурный тигель, где переплелись греческая философия, римское право, арабская наука, норманнская архитектура и испанская страсть. Каждая эпоха оставила неизгладимый след в языке, искусстве и традициях острова.</p>
+            
+            <h3>Праздники и фестивали</h3>
+            <p>От мистерий Страстной недели до шумных летних сагр — сицилийские праздники полны театральности и искренней веры. Они объединяют поколения и сохраняют живую связь с прошлым.</p>
+          </div>
+          
+          <div class="culture-features">
+            <div class="culture-feature">
+              <h4>🎭 Театр марионеток</h4>
+              <p>Opera dei Pupi — традиционный театр кукол, внесенный в список ЮНЕСКО</p>
+            </div>
+            
+            <div class="culture-feature">
+              <h4>🎵 Музыкальное наследие</h4>
+              <p>От народных песен до оперы Беллини — музыка пронизывает сицилийскую жизнь</p>
+            </div>
+            
+            <div class="culture-feature">
+              <h4>🏛️ Архитектура</h4>
+              <p>Барокко Ното, греческие храмы, арабские купола — живая энциклопедия стилей</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section" aria-labelledby="contact-title">
+      <div class="container">
+        <header class="section-header">
+          <h2 id="contact-title" class="section-title">Свяжитесь с нами</h2>
+          <p class="section-subtitle">Задайте вопрос или поделитесь своей историей Сицилии</p>
+        </header>
+        
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="form-group">
+            <label for="name" class="form-label">Ваше имя</label>
+            <input 
+              type="text" 
+              id="name" 
+              name="name" 
+              class="form-input" 
+              required 
+              aria-required="true"
+              aria-describedby="name-error"
+            >
+            <span id="name-error" class="form-error" role="alert"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="email" class="form-label">Email</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="form-input" 
+              required 
+              aria-required="true"
+              aria-describedby="email-error"
+            >
+            <span id="email-error" class="form-error" role="alert"></span>
+          </div>
+          
+          <div class="form-group">
+            <label for="message" class="form-label">Сообщение</label>
+            <textarea 
+              id="message" 
+              name="message" 
+              class="form-textarea" 
+              rows="5" 
+              required 
+              aria-required="true"
+              aria-describedby="message-error"
+            ></textarea>
+            <span id="message-error" class="form-error" role="alert"></span>
+          </div>
+          
+          <button type="submit" class="form-submit">Отправить сообщение</button>
+          
+          <div id="form-success" class="form-success" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer" role="contentinfo">
+    <div class="container">
+      <p>&copy; 2025 Живая карта Сицилии. Проект создан для дизайнерского конкурса.</p>
+      <p class="footer-tech">Создано с ❤️ используя HTML, CSS, JavaScript и GSAP</p>
+    </div>
+  </footer>
+
+  <!-- Modal -->
+  <div id="modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-container">
+      <div class="modal-header">
+        <h2 id="modal-title" class="modal-title"></h2>
+        <button class="modal-close" aria-label="Закрыть">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      
+      <div class="modal-body">
+        <div class="modal-gallery" id="modalGallery"></div>
+        <div class="modal-description" id="modalDescription"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  
+  <!-- Scripts -->
+  <script type="module" src="./scripts/app.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,28 @@
+{
+  "name": "Живая карта Сицилии",
+  "short_name": "Sicilia",
+  "description": "Интерактивная карта острова Сицилия с историей, культурой и достопримечательностями",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF6F2",
+  "theme_color": "#3498DB",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/assets/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["travel", "education", "entertainment"],
+  "lang": "ru-RU",
+  "dir": "ltr"
+}
+

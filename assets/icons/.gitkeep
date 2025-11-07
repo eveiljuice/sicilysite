@@ -1,0 +1,24 @@
+# Icons Directory
+
+## TODO: Generate PWA Icons
+
+Create icon files for Progressive Web App:
+
+- `icon-192.png` - 192x192px
+- `icon-512.png` - 512x512px
+- `favicon.ico` - 32x32px (optional, SVG already provided)
+
+Use the `favicon.svg` as source and generate PNG versions:
+
+### Tools:
+- https://realfavicongenerator.net/
+- https://www.favicon-generator.org/
+- Or use design tools like Figma, Inkscape, or ImageMagick
+
+### Quick command (requires ImageMagick):
+```bash
+# Convert SVG to PNG icons
+magick convert -background none favicon.svg -resize 192x192 icon-192.png
+magick convert -background none favicon.svg -resize 512x512 icon-512.png
+```
+

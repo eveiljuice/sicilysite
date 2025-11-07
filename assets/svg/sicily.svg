@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" role="img" aria-label="Интерактивная карта Сицилии">
+  <defs>
+    <style>
+      .region {
+        fill: transparent;
+        stroke: color-mix(in srgb, #0B0F1A 60%, black);
+        stroke-width: 2;
+        cursor: pointer;
+        transition: fill 0.25s ease, stroke 0.25s ease;
+      }
+      .region:hover,
+      .region:focus {
+        fill: color-mix(in srgb, #95A472 28%, white);
+        stroke: #F39C12;
+        outline: none;
+      }
+      .route {
+        fill: none;
+        stroke: #E67E22;
+        stroke-width: 3;
+        stroke-dasharray: 1000;
+        stroke-dashoffset: 1000;
+        stroke-linecap: round;
+        opacity: 0.7;
+      }
+      .coastline {
+        fill: none;
+        stroke: #3498DB;
+        stroke-width: 1;
+        opacity: 0.3;
+      }
+    </style>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1000" height="600" fill="#FAF6F2"/>
+  
+  <!-- Sea indication -->
+  <circle cx="500" cy="300" r="450" fill="#3498DB" opacity="0.05"/>
+  
+  <!-- Main island outline (simplified Sicily shape) -->
+  <path class="coastline" d="M 850 200 Q 880 180 900 210 L 920 240 L 900 270 L 880 300 Q 870 350 850 380 L 820 420 L 780 450 L 720 480 L 650 490 L 580 485 L 500 470 L 420 450 L 350 420 L 280 380 L 220 330 L 180 280 L 150 230 Q 130 200 120 170 L 110 140 Q 100 120 120 110 L 160 120 L 220 150 L 280 180 L 350 210 L 420 230 L 500 240 L 580 235 L 650 220 L 720 200 L 780 190 Z"/>
+  
+  <!-- Regions -->
+  
+  <!-- Palermo (Northwest) -->
+  <path id="palermo" class="region" tabindex="0" role="button" 
+        aria-label="Регион Палермо: Столица Сицилии"
+        d="M 180 280 L 220 250 L 280 240 L 320 250 L 340 280 L 330 320 L 300 350 L 250 360 L 200 340 L 180 310 Z"/>
+  
+  <!-- Trapani (West) -->
+  <path id="trapani" class="region" tabindex="0" role="button"
+        aria-label="Регион Трапани: Древний порт на западном побережье"
+        d="M 110 140 L 160 120 L 200 150 L 220 180 L 210 220 L 180 240 L 150 230 L 120 200 Z"/>
+  
+  <!-- Agrigento (South-central) -->
+  <path id="agrigento" class="region" tabindex="0" role="button"
+        aria-label="Регион Агридженто: Долина храмов"
+        d="M 250 360 L 300 350 L 350 360 L 400 380 L 420 420 L 400 450 L 350 460 L 290 450 L 250 420 Z"/>
+  
+  <!-- Caltanissetta (Central) -->
+  <path id="caltanissetta" class="region" tabindex="0" role="button"
+        aria-label="Регион Кальтаниссетта: Сердце острова"
+        d="M 350 300 L 420 290 L 480 300 L 500 340 L 480 380 L 420 390 L 360 380 L 340 340 Z"/>
+  
+  <!-- Enna (Central-north) -->
+  <path id="enna" class="region" tabindex="0" role="button"
+        aria-label="Регион Энна: Самый высокий провинциальный центр"
+        d="M 420 240 L 500 230 L 560 240 L 580 270 L 560 310 L 500 320 L 440 310 L 420 270 Z"/>
+  
+  <!-- Catania (East-central) -->
+  <path id="catania" class="region" tabindex="0" role="button"
+        aria-label="Регион Катания: Город у подножия Этны"
+        d="M 650 300 L 720 280 L 760 300 L 780 340 L 760 380 L 700 400 L 640 390 L 620 350 Z"/>
+  
+  <!-- Messina (Northeast) -->
+  <path id="messina" class="region" tabindex="0" role="button"
+        aria-label="Регион Мессина: Ворота Сицилии"
+        d="M 720 200 L 800 190 L 850 200 L 880 230 L 860 270 L 800 280 L 740 270 L 720 240 Z"/>
+  
+  <!-- Taormina (East coast - part of Messina province but separate for tourism) -->
+  <path id="taormina" class="region" tabindex="0" role="button"
+        aria-label="Регион Таормина: Жемчужина ионического побережья"
+        d="M 760 240 L 820 230 L 840 260 L 820 290 L 760 300 L 740 270 Z"/>
+  
+  <!-- Siracusa (Southeast) -->
+  <path id="siracusa" class="region" tabindex="0" role="button"
+        aria-label="Регион Сиракузы: Древний город-государство"
+        d="M 780 420 L 850 400 L 880 430 L 860 470 L 800 480 L 750 460 L 760 430 Z"/>
+  
+  <!-- Ragusa (South) -->
+  <path id="ragusa" class="region" tabindex="0" role="button"
+        aria-label="Регион Рагуза: Город позднего барокко"
+        d="M 580 420 L 650 410 L 700 430 L 720 470 L 680 490 L 600 485 L 560 460 Z"/>
+  
+  <!-- Routes Layer (for animated paths) -->
+  <g id="routes" aria-hidden="true">
+    <!-- Northern coastal route -->
+    <path id="route-north" class="route"
+          d="M 180 240 Q 350 210 500 230 Q 650 220 780 200 Q 850 195 880 230"/>
+    
+    <!-- Eastern route -->
+    <path id="route-east" class="route"
+          d="M 820 260 L 780 300 Q 720 360 700 400 L 750 460 Q 800 470 850 450"/>
+    
+    <!-- Southern route -->
+    <path id="route-south" class="route"
+          d="M 250 420 Q 350 450 500 470 Q 600 480 700 475"/>
+    
+    <!-- Central cross route -->
+    <path id="route-central" class="route"
+          d="M 250 320 Q 380 320 500 310 Q 620 320 720 340"/>
+  </g>
+  
+  <!-- Mount Etna indication -->
+  <circle cx="720" cy="340" r="30" fill="#0B0F1A" opacity="0.1" aria-label="Вулкан Этна"/>
+  <circle cx="720" cy="340" r="20" fill="#E67E22" opacity="0.15"/>
+</svg>
+

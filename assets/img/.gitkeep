@@ -1,0 +1,41 @@
+# Image Assets Directory
+
+## TODO: Add Real Images
+
+Replace placeholder paths in `data/locations.json` with actual images:
+
+### Required Images:
+
+**Stories Section:**
+- `palermo-story.jpg` - Palermo cityscape or markets
+- `catania-story.jpg` - Catania with Mount Etna
+- `agrigento-story.jpg` - Valley of the Temples
+
+**Location Galleries (referenced in locations.json):**
+- `palermo-1.jpg`, `palermo-2.jpg`, `palermo-3.jpg`
+- `catania-1.jpg`, `catania-2.jpg`
+- `taormina-1.jpg`, `taormina-2.jpg`
+- `agrigento-1.jpg`, `agrigento-2.jpg`, `agrigento-3.jpg`
+- `trapani-1.jpg`
+- `siracusa-1.jpg`, `siracusa-2.jpg`
+- `messina-1.jpg`
+- `enna-1.jpg`
+- `ragusa-1.jpg`, `ragusa-2.jpg`
+- `caltanissetta-1.jpg`
+
+**OG Image:**
+- `og-image.jpg` - Social sharing preview (1200x630px recommended)
+
+### Image Specifications:
+- Format: AVIF (with WebP/JPEG fallbacks) or high-quality JPEG
+- Stories: ~1200x675px (16:9 aspect ratio)
+- Gallery: ~1600x900px or larger for main views
+- Optimization: Use tools like Squoosh or ImageOptim
+- Alt text: Add descriptive alt attributes in HTML
+
+### Temporary Placeholder:
+For development, you can use services like:
+- https://picsum.photos/ (e.g., `https://picsum.photos/1600/900`)
+- https://source.unsplash.com/
+- Or create simple colored rectangles with text overlays
+
