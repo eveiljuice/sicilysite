@@ -25,54 +25,89 @@ function createCustomIcon(color = '#E67E22') {
 export async function initMap() {
   // Check if Leaflet is loaded
   if (typeof L === 'undefined') {
-    console.error('Leaflet library is not loaded. Please ensure Leaflet script is included before app.js');
+    console.error('❌ Leaflet library is not loaded. Please ensure Leaflet script is included before app.js');
+    const mapContainer = document.getElementById('sicilyMap');
+    if (mapContainer) {
+      mapContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: #e74c3c;">Ошибка загрузки карты. Проверьте консоль браузера.</div>';
+    }
     return;
   }
+  
+  console.log('✅ Leaflet loaded successfully');
   
   // Load locations data
   try {
     const response = await fetch('./data/locations.json');
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
     locationsData = await response.json();
+    console.log(`✅ Loaded ${locationsData.length} locations`);
   } catch (error) {
-    console.error('Failed to load locations data:', error);
+    console.error('❌ Failed to load locations data:', error);
+    const mapContainer = document.getElementById('sicilyMap');
+    if (mapContainer) {
+      mapContainer.innerHTML = '<div style="padding: 2rem; text-align: center; color: #e74c3c;">Ошибка загрузки данных локаций.</div>';
+    }
     return;
   }
   
   // Initialize Leaflet map
   const mapContainer = document.getElementById('sicilyMap');
   if (!mapContainer) {
-    console.error('Map container not found');
+    console.error('❌ Map container not found');
     return;
+  }
+  
+  // Ensure container has height
+  if (!mapContainer.style.height && !mapContainer.offsetHeight) {
+    mapContainer.style.height = '600px';
+    console.log('⚠️ Set map container height to 600px');
   }
   
   // Center of Sicily
   const sicilyCenter = [37.5, 14.0];
   
-  // Create map instance
-  map = L.map('sicilyMap', {
-    center: sicilyCenter,
-    zoom: 8,
-    minZoom: 7,
-    maxZoom: 15,
-    zoomControl: true,
-    attributionControl: true,
-    scrollWheelZoom: true,
-    doubleClickZoom: true,
-    boxZoom: true,
-    keyboard: true,
-    dragging: true,
-    touchZoom: true
-  });
-  
-  // Add OpenStreetMap tile layer
-  const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    maxZoom: 19,
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    tileSize: 256,
-    zoomOffset: 0
-  });
-  
-  osmLayer.addTo(map);
+  try {
+    // Create map instance
+    map = L.map('sicilyMap', {
+      center: sicilyCenter,
+      zoom: 8,
+      minZoom: 7,
+      maxZoom: 15,
+      zoomControl: true,
+      attributionControl: true,
+      scrollWheelZoom: true,
+      doubleClickZoom: true,
+      boxZoom: true,
+      keyboard: true,
+      dragging: true,
+      touchZoom: true
+    });
+    
+    console.log('✅ Map instance created');
+    
+    // Add OpenStreetMap tile layer
+    const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      tileSize: 256,
+      zoomOffset: 0
+    });
+    
+    osmLayer.addTo(map);
+    console.log('✅ OSM tile layer added');
+    
+    // Wait a bit for tiles to start loading
+    map.whenReady(() => {
+      console.log('✅ Map is ready');
+    });
+    
+  } catch (error) {
+    console.error('❌ Error initializing map:', error);
+    mapContainer.innerHTML = `<div style="padding: 2rem; text-align: center; color: #e74c3c;">Ошибка инициализации карты: ${error.message}</div>`;
+    return;
+  }
   
   // Add markers for each location
   addMarkers();
@@ -83,35 +118,43 @@ export async function initMap() {
   // Add scroll-triggered animation for map appearance
   animateMapAppearance();
   
-  console.log(`Map initialized with ${locationsData.length} locations`);
+  console.log(`✅ Map initialized with ${locationsData.length} locations`);
 }
 
 function addMarkers() {
-  if (!map || !locationsData.length) return;
+  if (!map || !locationsData.length) {
+    console.warn('⚠️ Cannot add markers: map or locations data missing');
+    return;
+  }
+  
+  console.log(`📍 Adding ${locationsData.length} markers...`);
   
   // Clear existing markers
   markers.forEach(marker => map.removeLayer(marker));
   markers = [];
   
+  let addedCount = 0;
+  
   locationsData.forEach(location => {
     if (!location.coords || !location.coords.lat || !location.coords.lng) {
-      console.warn(`Missing coordinates for location: ${location.id}`);
+      console.warn(`⚠️ Missing coordinates for location: ${location.id}`);
       return;
     }
     
     const latlng = [location.coords.lat, location.coords.lng];
     
-    // Create custom icon
-    const icon = createCustomIcon('#E67E22');
-    
-    // Create marker
-    const marker = L.marker(latlng, {
-      icon: icon,
-      title: location.name,
-      alt: location.name,
-      keyboard: true,
-      riseOnHover: true
-    });
+    try {
+      // Create custom icon
+      const icon = createCustomIcon('#E67E22');
+      
+      // Create marker
+      const marker = L.marker(latlng, {
+        icon: icon,
+        title: location.name,
+        alt: location.name,
+        keyboard: true,
+        riseOnHover: true
+      });
     
     // Add popup with location name
     marker.bindPopup(
@@ -155,10 +198,16 @@ function addMarkers() {
       marker.setZIndexOffset(0);
     });
     
-    // Add to map
-    marker.addTo(map);
-    markers.push(marker);
+      // Add to map
+      marker.addTo(map);
+      markers.push(marker);
+      addedCount++;
+    } catch (error) {
+      console.error(`❌ Error adding marker for ${location.name}:`, error);
+    }
   });
+  
+  console.log(`✅ Added ${addedCount} markers to map`);
   
   // Handle popup button clicks
   map.on('popupopen', (e) => {
