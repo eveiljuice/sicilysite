@@ -3,7 +3,7 @@
    ========================================== */
 
 .history-section {
-  padding: var(--space-xxl) 0;
+  padding: var(--space-xl) 0;
   background: linear-gradient(to bottom, var(--paper), color-mix(in srgb, var(--sea) 5%, var(--paper)));
   position: relative;
 }
@@ -19,7 +19,7 @@
   position: relative;
   max-width: 800px;
   margin-inline: auto;
-  margin-bottom: var(--space-xxl);
+  margin-bottom: var(--space-xl);
   padding: var(--space-lg) 0;
 }
 
