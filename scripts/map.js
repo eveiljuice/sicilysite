@@ -23,6 +23,12 @@ function createCustomIcon(color = '#E67E22') {
 }
 
 export async function initMap() {
+  // Check if Leaflet is loaded
+  if (typeof L === 'undefined') {
+    console.error('Leaflet library is not loaded. Please ensure Leaflet script is included before app.js');
+    return;
+  }
+  
   // Load locations data
   try {
     const response = await fetch('./data/locations.json');
